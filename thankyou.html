@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Thank You | Brew & Bliss</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+
+font-family:Poppins,sans-serif;
+
+height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+overflow:hidden;
+
+position:relative;
+
+color:white;
+
+text-align:center;
+
+}
+
+video{
+
+position:absolute;
+
+width:100%;
+
+height:100%;
+
+object-fit:cover;
+
+z-index:-2;
+
+}
+
+.overlay{
+
+position:absolute;
+
+width:100%;
+
+height:100%;
+
+background:rgba(28,18,12,.65);
+
+z-index:-1;
+
+}
+
+.card{
+
+background:rgba(255,255,255,.12);
+
+backdrop-filter:blur(12px);
+
+padding:50px;
+
+border-radius:20px;
+
+max-width:600px;
+
+width:90%;
+
+box-shadow:0 20px 40px rgba(0,0,0,.35);
+
+}
+
+.check{
+
+font-size:80px;
+
+margin-bottom:20px;
+
+}
+
+h1{
+
+font-family:'Playfair Display',serif;
+
+font-size:48px;
+
+margin-bottom:15px;
+
+}
+
+p{
+
+line-height:1.8;
+
+margin-bottom:30px;
+
+}
+
+a{
+
+display:inline-block;
+
+padding:15px 35px;
+
+background:#c58b45;
+
+color:white;
+
+text-decoration:none;
+
+border-radius:50px;
+
+transition:.3s;
+
+font-weight:600;
+
+}
+
+a:hover{
+
+background:#9b6432;
+
+transform:translateY(-3px);
+
+}
+
+@media(max-width:768px){
+
+h1{
+
+font-size:36px;
+
+}
+
+.card{
+
+padding:35px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<video autoplay muted loop playsinline>
+
+<source src="https://res.cloudinary.com/xk9sr4ls/video/upload/v1786017797/pika-f776a48d-ac4b-4a90-9127-dfdf9d708edb_xwu1fz.mp4" type="video/mp4">
+
+</video>
+
+<div class="overlay"></div>
+
+<div class="card">
+
+<div class="check">☕</div>
+
+<h1>Thank You!</h1>
+
+<p>
+
+Your FREE Coffee voucher has been reserved.
+
+<br><br>
+
+We received your request successfully.
+
+Please check your email for updates and exclusive Brew & Bliss offers.
+
+</p>
+
+<a href="index.html">Back to Home</a>
+
+</div>
+
+</body>
+
+</html>
