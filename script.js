@@ -1,14 +1,18 @@
+console.log("Brew & Bliss Loaded");
+
 const form = document.getElementById("coffee-form");
 const message = document.getElementById("form-message");
 
-form.addEventListener("submit", async function(event) {
-    event.preventDefault();
+form.addEventListener("submit", async function (event) {
 
-    const formData = new FormData(form);
+    event.preventDefault();
 
     message.textContent = "Submitting...";
 
+    const formData = new FormData(form);
+
     try {
+
         const response = await fetch(form.action, {
             method: "POST",
             body: formData,
@@ -18,12 +22,24 @@ form.addEventListener("submit", async function(event) {
         });
 
         if (response.ok) {
-            window.location.href = "thankyou.html";
+
+            window.location.href =
+                "https://jasmincristy005-droid.github.io/brew-bliss-landing-page/thankyou.html";
+
         } else {
-            message.textContent = "Something went wrong. Please try again.";
+
+            message.textContent =
+                "Something went wrong. Please try again.";
+
         }
 
     } catch (error) {
-        message.textContent = "Unable to submit the form. Please try again.";
+
+        console.error(error);
+
+        message.textContent =
+            "Unable to submit the form. Please try again.";
+
     }
+
 });
