@@ -24,7 +24,7 @@ form.addEventListener("submit", async function (event) {
         if (response.ok) {
 
             window.location.href =
-                "https://jasmincristy005-droid.github.io/brew-bliss-landing-page/thankyou.html";
+    "https://jasminecristy005-droid.github.io/brew-bliss-landing-page/thankyou.html";
 
         } else {
 
