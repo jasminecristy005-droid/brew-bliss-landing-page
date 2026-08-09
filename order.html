@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Brew & Bliss | Order Form</title>
+
+    <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: "Poppins", Arial, sans-serif;
+        background: #f3ebe4;
+        color: #3b2418;
+        min-height: 100vh;
+        padding: 50px 20px;
+    }
+
+    .order-container {
+        max-width: 680px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 45px;
+        border-radius: 22px;
+        box-shadow: 0 15px 40px rgba(59, 36, 24, 0.12);
+    }
+
+    .brand {
+        text-align: center;
+        margin-bottom: 8px;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 36px;
+        font-weight: 700;
+        color: #5a3825;
+        letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #806f64;
+        margin-bottom: 32px;
+        font-size: 15px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 28px;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 28px;
+        color: #3b2418;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #4b3021;
+        font-size: 14px;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100%;
+        padding: 14px 15px;
+        border: 1px solid #d8c8bd;
+        border-radius: 10px;
+        background: #fffdfb;
+        color: #3b2418;
+        font-family: inherit;
+        font-size: 15px;
+        outline: none;
+        transition: border-color 0.25s ease,
+                    box-shadow 0.25s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #b57b35;
+        box-shadow: 0 0 0 3px rgba(181, 123, 53, 0.12);
+    }
+
+    textarea {
+        min-height: 110px;
+        resize: vertical;
+    }
+
+    .order-button {
+        width: 100%;
+        padding: 15px 20px;
+        border: none;
+        border-radius: 30px;
+        background: #b57b35;
+        color: white;
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: all 0.25s ease;
+    }
+
+    .order-button:hover {
+        background: #8f5d28;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(143, 93, 40, 0.22);
+    }
+
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 24px;
+        color: #6f4e37;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+        color: #b57b35;
+    }
+
+    @media (max-width: 600px) {
+
+        body {
+            padding: 25px 15px;
+        }
+
+        .order-container {
+            padding: 30px 20px;
+            border-radius: 18px;
+        }
+
+        .brand {
+            font-size: 30px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        input,
+        select,
+        textarea {
+            padding: 13px;
+        }
+
+        .order-button {
+            padding: 14px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+    <div class="order-container">
+
+        <div class="brand">Brew & Bliss</div>
+
+        <p class="subtitle">
+            Fresh Coffee. Fresh Start.
+        </p>
+
+        <h2>Place Your Order</h2>
+
+        <form action="https://formspree.io/f/mljrjeyd" method="POST">
+
+            <div class="form-group">
+                <label for="first-name">First Name</label>
+                <input
+                    type="text"
+                    id="first-name"
+                    name="first_name"
+                    placeholder="Enter your first name"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="last-name">Last Name</label>
+                <input
+                    type="text"
+                    id="last-name"
+                    name="last_name"
+                    placeholder="Enter your last name"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter your phone number"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="product">Choose Your Coffee</label>
+
+                <select id="product" name="product" required>
+                    <option value="">Select a coffee</option>
+                    <option value="Cappuccino">Cappuccino</option>
+                    <option value="Matcha">Matcha</option>
+                    <option value="Mocha">Mocha</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+
+                <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    min="1"
+                    value="1"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="order-type">Order Type</label>
+
+                <select id="order-type" name="order_type" required>
+                    <option value="">Select order type</option>
+                    <option value="Pickup">Pickup</option>
+                    <option value="Delivery">Delivery</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="instructions">Special Instructions</label>
+
+                <textarea
+                    id="instructions"
+                    name="special_instructions"
+                    placeholder="Any special requests?"></textarea>
+            </div>
+
+            <button type="submit" class="order-button">
+                Place My Order
+            </button>
+
+        </form>
+
+        <a href="index.html" class="back-link">
+            ← Back to Brew & Bliss
+        </a>
+
+    </div>
+
+</body>
+</html>

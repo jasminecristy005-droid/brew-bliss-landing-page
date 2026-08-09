@@ -120,7 +120,63 @@ body{
     background:#8f5d28;
     transform:translateY(-2px);
 }
+/* ORDER FORM */
 
+.order-section {
+    padding: 70px 25px;
+}
+
+.order-content {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.order-form {
+    width: 100%;
+}
+
+.order-form input,
+.order-form select,
+.order-form textarea {
+    width: 100%;
+    padding: 16px 18px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.order-form select {
+    background: white;
+    color: #555;
+}
+
+.order-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.order-form button {
+    width: 100%;
+    padding: 17px;
+    background: #b57b35;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.order-form button:hover {
+    background: #8f5d28;
+    transform: translateY(-2px);
+}
 
 
 /* WHY SECTION */
@@ -419,4 +475,80 @@ body{
 body{
     background:red !important;
 
+}
+/* =========================
+   ORDER FORM - FINAL FIX
+========================= */
+
+#order-form {
+    width: 100%;
+    padding: 70px 20px;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+#order-form .order-content {
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+#order-form h2 {
+    text-align: center;
+    color: #4b2e1f;
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+#order-form .order-content > p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 35px;
+}
+
+#order-form .order-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+#order-form .order-form input,
+#order-form .order-form select,
+#order-form .order-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px 16px;
+    border: 1px solid #d6c5b5;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #333;
+    font-family: inherit;
+    font-size: 16px;
+    outline: none;
+}
+
+#order-form .order-form input:focus,
+#order-form .order-form select:focus,
+#order-form .order-form textarea:focus {
+    border-color: #b97a2b;
+}
+
+#order-form .order-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+#order-form .order-form button {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 8px;
+    background: #b97a2b;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#order-form .order-form button:hover {
+    background: #8f5d20;
 }
