@@ -1,8 +1,9 @@
 console.log("Brew & Bliss Loaded");
 
-// ===============================
+
+// ==========================================
 // CLAIM MY FREE COFFEE FORM
-// ===============================
+// ==========================================
 
 const coffeeForm = document.getElementById("coffee-form");
 const coffeeMessage = document.getElementById("form-message");
@@ -59,9 +60,9 @@ if (coffeeForm) {
 }
 
 
-// ===============================
+// ==========================================
 // ORDER FORM
-// ===============================
+// ==========================================
 
 const orderForm = document.querySelector(
     'form[action*="mljrjeyd"]'
@@ -72,6 +73,15 @@ if (orderForm) {
     orderForm.addEventListener("submit", async function (event) {
 
         event.preventDefault();
+
+        const orderButton = orderForm.querySelector(
+            'button[type="submit"]'
+        );
+
+        if (orderButton) {
+            orderButton.disabled = true;
+            orderButton.textContent = "Submitting...";
+        }
 
         const formData = new FormData(orderForm);
 
@@ -92,8 +102,13 @@ if (orderForm) {
 
             } else {
 
+                if (orderButton) {
+                    orderButton.disabled = false;
+                    orderButton.textContent = "Place My Order";
+                }
+
                 alert(
-                    "Something went wrong. Please try submitting your order again."
+                    "Something went wrong. Please try again."
                 );
 
             }
@@ -101,6 +116,11 @@ if (orderForm) {
         } catch (error) {
 
             console.error(error);
+
+            if (orderButton) {
+                orderButton.disabled = false;
+                orderButton.textContent = "Place My Order";
+            }
 
             alert(
                 "Unable to submit the order. Please check your internet connection and try again."
