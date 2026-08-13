@@ -175,6 +175,9 @@
         <h2>Place Your Order</h2>
 
         <form action="https://formspree.io/f/mljrjeyd" method="POST">
+            <input type="hidden" name="order_id" id="order-id">
+<input type="hidden" name="order_status" id="order-status" value="New Order">
+<input type="hidden" name="order_date" id="order-date">
 
             <div class="form-group">
                 <label for="first-name">First Name</label>
@@ -269,6 +272,213 @@
         </a>
 
     </div>
-<script src="js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+   
+<script>
+const orderForm = document.querySelector("form");
+
+orderForm.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+    const button = orderForm.querySelector(
+        'button[type="submit"]'
+    );
+
+    if (button) {
+        button.disabled = true;
+        button.textContent = "Submitting...";
+    }
+
+    // Generate Order ID
+    const orderNumber =
+        Math.floor(100000 + Math.random() * 900000);
+
+    const orderId = "BB-" + orderNumber;
+
+    // Order date
+    const orderDate = new Date().toLocaleString();
+
+    // Get customer information
+    const firstName =
+        document.getElementById("first-name").value.trim();
+
+    const lastName =
+        document.getElementById("last-name").value.trim();
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const phone =
+        document.getElementById("phone").value.trim();
+
+    const product =
+        document.getElementById("product").value;
+
+    const quantity =
+        Number(document.getElementById("quantity").value);
+
+    // Product prices
+    const prices = {
+        "Cappuccino": 120,
+        "Matcha": 130,
+        "Mocha": 140
+    };
+
+    const price = prices[product];
+    const total = price * quantity;
+
+    // Customer name
+    const customerName =
+        `${firstName} ${lastName}`;
+
+    // Items
+    const items =
+        `${product} x ${quantity}`;
+
+    // Fill hidden fields
+    document.getElementById("order-id").value = orderId;
+    document.getElementById("order-date").value = orderDate;
+
+    // Create order object for localStorage
+    const order = {
+    order_id: orderId,
+    customer_name: customerName,
+    customer_email: email,
+    items: items,
+    total: total,
+    status: "New Order",
+    first_name: firstName,
+    last_name: lastName,
+    phone: phone,
+    product: product,
+    quantity: quantity,
+    price: price,
+    order_type: document.getElementById("order-type").value
+}
+
+    // Get existing orders
+    let orders =
+        JSON.parse(
+            localStorage.getItem("brewBlissOrders")
+        ) || [];
+
+    // Add new order
+    orders.push(order);
+
+    // Save orders
+    localStorage.setItem(
+        "brewBlissOrders",
+        JSON.stringify(orders)
+    );
+
+    // Save order to Supabase
+    try {
+
+        const { data, error } =
+            await supabaseClient
+                .from("orders")
+                .insert([
+                    {
+                        order_id: orderId,
+                        customer_name: customerName,
+                        customer_email: email,
+                        items: items,
+                        total: total,
+                        status: "New Order",
+                        first_name: firstName,
+                        last_name: lastName,
+                        phone: phone,
+                        product: product,
+                        quantity: quantity,
+                        price: price
+                    }
+                ])
+                .select();
+
+        if (error) {
+            console.error(
+                "Supabase error:",
+                error
+            );
+
+            throw error;
+        }
+
+        console.log(
+            "Order saved to Supabase:",
+            data
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Unable to save order to Supabase:",
+            error
+        );
+
+        if (button) {
+            button.disabled = false;
+            button.textContent = "Place My Order";
+        }
+
+        alert(
+            "Unable to save your order. Please try again."
+        );
+
+        return;
+    }
+
+    // Send to Formspree
+    try {
+
+        const response = await fetch(
+            orderForm.action,
+            {
+                method: "POST",
+                body: new FormData(orderForm),
+                headers: {
+                    "Accept": "application/json"
+                }
+            }
+        );
+if (response.ok) {
+
+    console.log("ORDER CREATED:", orderId);
+
+    window.location.assign(
+        "./thankyou.html?order_id=" +
+        encodeURIComponent(orderId)
+    );
+
+} else {
+
+    if (button) {
+        button.disabled = false;
+        button.textContent = "Place My Order";
+    }
+
+    alert(
+        "Something went wrong. Please try again."
+    );
+}
+    } catch (error) {
+
+        console.error(error);
+
+        if (button) {
+            button.disabled = false;
+            button.textContent = "Place My Order";
+        }
+
+        alert(
+            "Unable to submit the order. Please try again."
+        );
+    }
+
+});
+</script>
+
 </body>
 </html>
