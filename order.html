@@ -452,20 +452,17 @@ if (response.ok) {
         encodeURIComponent(orderId)
     );
 
+} else {
+
+    if (button) {
+        button.disabled = false;
+        button.textContent = "Place My Order";
+    }
+
+    alert(
+        "Something went wrong. Please try again."
+    );
 }
-
-}else {
-
-            if (button) {
-                button.disabled = false;
-                button.textContent = "Place My Order";
-            }
-
-            alert(
-                "Something went wrong. Please try again."
-            );
-        }
-
     } catch (error) {
 
         console.error(error);
