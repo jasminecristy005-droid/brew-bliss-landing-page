@@ -443,18 +443,16 @@ orderForm.addEventListener("submit", async function (event) {
                 }
             }
         );
+if (response.ok) {
 
-       if (response.ok) {
+    console.log("ORDER CREATED:", orderId);
 
-    console.log("REDIRECT ORDER ID:", orderId);
+    window.location.assign(
+        "./thankyou.html?order_id=" +
+        encodeURIComponent(orderId)
+    );
 
-    const thankYouURL =
-        "thankyou.html?order_id=" +
-        encodeURIComponent(orderId);
-
-    console.log("REDIRECT URL:", thankYouURL);
-
-    window.location.href = thankYouURL;
+}
 
 }else {
 
