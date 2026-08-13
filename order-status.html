@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Brew & Bliss | Order Status</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3ebe4;
+            color: #3b2418;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .status-container {
+            width: 100%;
+            max-width: 650px;
+        }
+
+        .brand {
+            text-align: center;
+            font-family: Georgia, serif;
+            font-size: 40px;
+            font-weight: 700;
+            color: #5a3825;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #806f64;
+            margin-bottom: 30px;
+        }
+
+        .status-card {
+            background: white;
+            border-radius: 24px;
+            padding: 35px 30px;
+            box-shadow: 0 15px 40px rgba(59, 36, 24, 0.12);
+        }
+
+        .order-id {
+            text-align: center;
+            color: #806f64;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .order-id strong {
+            color: #5a3825;
+            font-size: 18px;
+        }
+
+        .customer-name {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .current-status {
+            text-align: center;
+            padding: 18px;
+            border-radius: 18px;
+            background: #f3ebe4;
+            margin-bottom: 30px;
+        }
+
+        .current-status-label {
+            display: block;
+            font-size: 12px;
+            color: #806f64;
+            margin-bottom: 5px;
+        }
+
+        .current-status strong {
+            font-size: 25px;
+            color: #6f4e37;
+        }
+
+        .progress {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 35px 0;
+        }
+
+        .progress::before {
+            content: "";
+            position: absolute;
+            top: 18px;
+            left: 8%;
+            right: 8%;
+            height: 4px;
+            background: #eadfd7;
+            z-index: 0;
+        }
+
+        .step {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            width: 25%;
+        }
+
+        .circle {
+            width: 38px;
+            height: 38px;
+            margin: auto;
+            border-radius: 50%;
+            background: #eadfd7;
+            color: #806f64;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            border: 4px solid white;
+        }
+
+        .step.active .circle,
+        .step.completed .circle {
+            background: #b57b35;
+            color: white;
+        }
+
+        .step-label {
+            display: block;
+            margin-top: 8px;
+            font-size: 11px;
+            color: #806f64;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #6f4e37;
+            font-weight: 600;
+        }
+
+        .order-details {
+            background: #fffaf6;
+            border: 1px solid #eadfd7;
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 25px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+
+        .detail-row span:first-child {
+            color: #806f64;
+        }
+
+        .detail-row span:last-child {
+            font-weight: 600;
+            color: #5a3825;
+            text-align: right;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #6f4e37;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .no-order {
+            text-align: center;
+            color: #806f64;
+            padding: 25px 10px;
+        }
+
+        .no-order a {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #8f5d28;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            .status-card {
+                padding: 25px 18px;
+            }
+
+            .brand {
+                font-size: 32px;
+            }
+
+            .step-label {
+                font-size: 9px;
+            }
+
+            .circle {
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
+            }
+        }
+    </style>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+</head>
+
+<body>
+
+<div class="status-container">
+
+    <div class="brand">
+        Brew & Bliss
+    </div>
+
+    <p class="subtitle">
+        Track Your Coffee Order
+    </p>
+
+    <div class="status-card" id="status-card">
+        Loading your order...
+    </div>
+
+</div>
+
+<script>
+
+const statusCard = document.getElementById("status-card");
+
+const statusSteps = [
+    "New Order",
+    "Processing",
+    "Ready/Served",
+    "Completed"
+];
+
+
+// ========================================
+// LOAD ORDER
+// ========================================
+
+async function loadOrderStatus() {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get("order_id");
+
+
+    if (!orderId) {
+
+        statusCard.innerHTML = `
+            <div class="no-order">
+
+                <h2>No Order Found</h2>
+
+                <p>
+                    No Order ID was provided.
+                </p>
+
+                <a href="index.html">
+                    Back to Brew & Bliss
+                </a>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    // Get order from Supabase
+
+    const { data: order, error } = await supabaseClient
+        .from("orders")
+        .select("*")
+        .eq("order_id", orderId)
+        .single();
+
+
+    if (error || !order) {
+
+        console.error("Order loading failed:", error);
+
+        statusCard.innerHTML = `
+            <div class="no-order">
+
+                <h2>Order Not Found</h2>
+
+                <p>
+                    We couldn't find an order with that Order ID.
+                </p>
+
+                <a href="index.html">
+                    Back to Brew & Bliss
+                </a>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    // ========================================
+    // ORDER STATUS
+    // ========================================
+
+    const currentStatus = order.status || "New Order";
+
+    let currentIndex = statusSteps.indexOf(currentStatus);
+
+    if (currentIndex === -1) {
+        currentIndex = 0;
+    }
+
+
+    // ========================================
+    // PROGRESS STEPS
+    // ========================================
+
+    let progressHTML = "";
+
+
+    statusSteps.forEach((status, index) => {
+
+        let stepClass = "";
+
+
+        if (index < currentIndex) {
+            stepClass = "completed";
+        }
+
+        else if (index === currentIndex) {
+            stepClass = "active";
+        }
+
+
+        let icon = "";
+
+        if (index === 0) {
+            icon = "🆕";
+        }
+
+        if (index === 1) {
+            icon = "☕";
+        }
+
+        if (index === 2) {
+            icon = "✅";
+        }
+
+        if (index === 3) {
+            icon = "🎉";
+        }
+
+
+        progressHTML += `
+
+            <div class="step ${stepClass}">
+
+                <div class="circle">
+                    ${icon}
+                </div>
+
+                <span class="step-label">
+                    ${status}
+                </span>
+
+            </div>
+
+        `;
+
+    });
+
+
+    // ========================================
+    // CUSTOMER
+    // ========================================
+
+    const customerName =
+        order.first_name
+            ? `${order.first_name} ${order.last_name || ""}`.trim()
+            : order.customer_name || "Customer";
+
+
+    // ========================================
+    // ITEMS
+    // ========================================
+
+    const items =
+        order.items ||
+        (
+            order.product
+                ? `${order.product} x ${order.quantity || 1}`
+                : "—"
+        );
+
+
+    // ========================================
+    // TOTAL
+    // ========================================
+
+    const total =
+        order.total !== null &&
+        order.total !== undefined
+            ? `₱${Number(order.total).toFixed(2)}`
+            : "—";
+
+
+    // ========================================
+    // DATE
+    // ========================================
+
+    const orderDate =
+        order.created_at
+            ? new Date(order.created_at).toLocaleString()
+            : "—";
+
+
+    // ========================================
+    // DISPLAY ORDER
+    // ========================================
+
+    statusCard.innerHTML = `
+
+        <div class="order-id">
+
+            Order ID
+
+            <br>
+
+            <strong>
+                ${order.order_id}
+            </strong>
+
+        </div>
+
+
+        <div class="customer-name">
+
+            Hello, ${customerName}!
+
+        </div>
+
+
+        <div class="current-status">
+
+            <span class="current-status-label">
+                Current Order Status
+            </span>
+
+            <strong>
+                ${currentStatus}
+            </strong>
+
+        </div>
+
+
+        <div class="progress">
+
+            ${progressHTML}
+
+        </div>
+
+
+        <div class="order-details">
+
+            <div class="detail-row">
+
+                <span>Items</span>
+
+                <span>
+                    ${items}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span>Quantity</span>
+
+                <span>
+                    ${order.quantity || "—"}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span>Total</span>
+
+                <span>
+                    ${total}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span>Order Date</span>
+
+                <span>
+                    ${orderDate}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <a href="index.html" class="back-link">
+
+            ← Back to Brew & Bliss
+
+        </a>
+
+    `;
+
+}
+
+
+// ========================================
+// INITIAL LOAD
+// ========================================
+
+loadOrderStatus();
+
+
+// ========================================
+// REALTIME ORDER STATUS
+// ========================================
+
+const urlParams = new URLSearchParams(window.location.search);
+const orderId = urlParams.get("order_id");
+
+
+if (orderId) {
+
+    supabaseClient
+
+        .channel("order-status-" + orderId)
+
+        .on(
+            "postgres_changes",
+            {
+                event: "UPDATE",
+                schema: "public",
+                table: "orders",
+                filter: "order_id=eq." + orderId
+            },
+
+            () => {
+
+                loadOrderStatus();
+
+            }
+        )
+
+        .subscribe();
+
+}
+
+</script>
+
+</body>
+</html>

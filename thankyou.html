@@ -189,9 +189,51 @@ Please check your email for updates and exclusive Brew & Bliss offers.
 
 </p>
 
-<a href="index.html">Back to Home</a>
+<div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+
+    <a href="index.html">
+        Back to Home
+    </a>
+
+    <a href="#" id="track-order"
+       style="background:#6f4e37;">
+        Track My Order
+    </a>
 
 </div>
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const trackButton = document.getElementById("track-order");
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const orderId = urlParams.get("order_id");
+
+    console.log("THANK YOU URL:", window.location.href);
+    console.log("THANK YOU ORDER ID:", orderId);
+
+
+    if (orderId) {
+
+        trackButton.href =
+            "order-status.html?order_id=" +
+            encodeURIComponent(orderId);
+
+    } else {
+
+        trackButton.href = "order-status.html";
+
+        console.warn(
+            "No order_id found in Thank You page URL."
+        );
+
+    }
+
+});
+
+</script>
 
 </body>
 
