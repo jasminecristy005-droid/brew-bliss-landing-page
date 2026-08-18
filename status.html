@@ -14,7 +14,7 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Poppins", Arial, sans-serif;
             background: #f3ebe4;
             color: #3b2418;
             min-height: 100vh;
@@ -31,7 +31,7 @@
 
         .brand {
             text-align: center;
-            font-family: Georgia, serif;
+            font-family: "Playfair Display", Georgia, serif;
             font-size: 40px;
             font-weight: 700;
             color: #5a3825;
@@ -126,6 +126,7 @@
             align-items: center;
             justify-content: center;
             font-size: 16px;
+            font-weight: 600;
             border: 4px solid white;
         }
 
@@ -160,7 +161,7 @@
             display: flex;
             justify-content: space-between;
             gap: 15px;
-            padding: 10px 0;
+            padding: 8px 0;
             font-size: 14px;
         }
 
@@ -183,6 +184,10 @@
             font-weight: 600;
         }
 
+        .back-link:hover {
+            color: #b57b35;
+        }
+
         .no-order {
             text-align: center;
             color: #806f64;
@@ -199,13 +204,9 @@
             border-radius: 20px;
             font-weight: 600;
         }
-.status-message {
-    margin-top: 8px;
-    color: #806f64;
-    font-size: 14px;
-    line-height: 1.5;
-}
+
         @media (max-width: 600px) {
+
             .status-card {
                 padding: 25px 18px;
             }
@@ -225,10 +226,6 @@
             }
         }
     </style>
-
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase.js"></script>
 </head>
 
 <body>
@@ -244,10 +241,13 @@
     </p>
 
     <div class="status-card" id="status-card">
-        Loading your order...
+
+        <!-- Order information will appear here -->
+
     </div>
 
 </div>
+
 
 <script>
 
@@ -261,17 +261,15 @@ const statusSteps = [
 ];
 
 
-// ========================================
-// LOAD ORDER
-// ========================================
+function loadOrderStatus() {
 
-async function loadOrderStatus() {
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const orderId = urlParams.get("order_id");
+    const orders =
+        JSON.parse(
+            localStorage.getItem("brewBlissOrders")
+        ) || [];
 
 
-    if (!orderId) {
+    if (orders.length === 0) {
 
         statusCard.innerHTML = `
             <div class="no-order">
@@ -279,7 +277,7 @@ async function loadOrderStatus() {
                 <h2>No Order Found</h2>
 
                 <p>
-                    No Order ID was provided.
+                    We couldn't find an order yet.
                 </p>
 
                 <a href="index.html">
@@ -292,72 +290,45 @@ async function loadOrderStatus() {
         return;
     }
 
+// Get Order ID from URL
+const urlParams = new URLSearchParams(window.location.search);
+const orderId = urlParams.get("order_id");
 
-    // Get order from Supabase
+// Find the specific order
+const order = orders.find(
+    order => order.order_id === orderId
+);
 
-    const { data: order, error } = await supabaseClient
-        .from("orders")
-        .select("*")
-        .eq("order_id", orderId)
-        .single();
+if (!order) {
 
+    statusCard.innerHTML = `
+        <div class="no-order">
 
-    if (error || !order) {
+            <h2>Order Not Found</h2>
 
-        console.error("Order loading failed:", error);
+            <p>
+                We couldn't find an order with that Order ID.
+            </p>
 
-        statusCard.innerHTML = `
-            <div class="no-order">
+            <a href="index.html">
+                Back to Brew & Bliss
+            </a>
 
-                <h2>Order Not Found</h2>
+        </div>
+    `;
 
-                <p>
-                    We couldn't find an order with that Order ID.
-                </p>
-
-                <a href="index.html">
-                    Back to Brew & Bliss
-                </a>
-
-            </div>
-        `;
-
-        return;
-    }
-
-
-    // ========================================
-    // ORDER STATUS
-    // ========================================
-
-    const currentStatus = order.status || "New Order";
-let statusMessage = "";
-
-if (currentStatus === "New Order") {
-    statusMessage = "🆕 We received your order and are getting it ready.";
+    return;
 }
 
-if (currentStatus === "Processing") {
-    statusMessage = "☕ Your coffee is being prepared. Please wait a moment.";
-}
 
-if (currentStatus === "Ready/Served") {
-    statusMessage = "✅ Your order is ready. Thank you for choosing Brew & Bliss!";
-}
-
-if (currentStatus === "Completed") {
-    statusMessage = "🎉 Your order is complete. Thank you for ordering from Brew & Bliss!";
-}
-    let currentIndex = statusSteps.indexOf(currentStatus);
-
-    if (currentIndex === -1) {
-        currentIndex = 0;
-    }
+    // Current status
+    const currentStatus =
+        order.order_status || "New Order";
 
 
-    // ========================================
-    // PROGRESS STEPS
-    // ========================================
+    const currentIndex =
+        statusSteps.indexOf(currentStatus);
+
 
     let progressHTML = "";
 
@@ -366,13 +337,14 @@ if (currentStatus === "Completed") {
 
         let stepClass = "";
 
-
         if (index < currentIndex) {
-            stepClass = "completed";
-        }
 
-        else if (index === currentIndex) {
+            stepClass = "completed";
+
+        } else if (index === currentIndex) {
+
             stepClass = "active";
+
         }
 
 
@@ -410,57 +382,8 @@ if (currentStatus === "Completed") {
             </div>
 
         `;
-
     });
 
-
-    // ========================================
-    // CUSTOMER
-    // ========================================
-
-    const customerName =
-        order.first_name
-            ? `${order.first_name} ${order.last_name || ""}`.trim()
-            : order.customer_name || "Customer";
-
-
-    // ========================================
-    // ITEMS
-    // ========================================
-
-    const items =
-        order.items ||
-        (
-            order.product
-                ? `${order.product} x ${order.quantity || 1}`
-                : "—"
-        );
-
-
-    // ========================================
-    // TOTAL
-    // ========================================
-
-    const total =
-        order.total !== null &&
-        order.total !== undefined
-            ? `₱${Number(order.total).toFixed(2)}`
-            : "—";
-
-
-    // ========================================
-    // DATE
-    // ========================================
-
-    const orderDate =
-        order.created_at
-            ? new Date(order.created_at).toLocaleString()
-            : "—";
-
-
-    // ========================================
-    // DISPLAY ORDER
-    // ========================================
 
     statusCard.innerHTML = `
 
@@ -479,7 +402,7 @@ if (currentStatus === "Completed") {
 
         <div class="customer-name">
 
-            Hello, ${customerName}!
+            Hello, ${order.first_name}!
 
         </div>
 
@@ -493,9 +416,6 @@ if (currentStatus === "Completed") {
             <strong>
                 ${currentStatus}
             </strong>
-            <p class="status-message">
-    ${statusMessage}
-</p>
 
         </div>
 
@@ -511,10 +431,10 @@ if (currentStatus === "Completed") {
 
             <div class="detail-row">
 
-                <span>Items</span>
+                <span>Coffee</span>
 
                 <span>
-                    ${items}
+                    ${order.product}
                 </span>
 
             </div>
@@ -525,7 +445,7 @@ if (currentStatus === "Completed") {
                 <span>Quantity</span>
 
                 <span>
-                    ${order.quantity || "—"}
+                    ${order.quantity}
                 </span>
 
             </div>
@@ -533,10 +453,10 @@ if (currentStatus === "Completed") {
 
             <div class="detail-row">
 
-                <span>Total</span>
+                <span>Order Type</span>
 
                 <span>
-                    ${total}
+                    ${order.order_type}
                 </span>
 
             </div>
@@ -547,7 +467,7 @@ if (currentStatus === "Completed") {
                 <span>Order Date</span>
 
                 <span>
-                    ${orderDate}
+                    ${order.order_date}
                 </span>
 
             </div>
@@ -556,56 +476,19 @@ if (currentStatus === "Completed") {
 
 
         <a href="index.html" class="back-link">
-
             ← Back to Brew & Bliss
-
         </a>
 
     `;
-
 }
 
 
-// ========================================
-// INITIAL LOAD
-// ========================================
-
+// Load immediately
 loadOrderStatus();
 
 
-// ========================================
-// REALTIME ORDER STATUS
-// ========================================
-
-const urlParams = new URLSearchParams(window.location.search);
-const orderId = urlParams.get("order_id");
-
-
-if (orderId) {
-
-    supabaseClient
-
-        .channel("order-status-" + orderId)
-
-        .on(
-            "postgres_changes",
-            {
-                event: "UPDATE",
-                schema: "public",
-                table: "orders",
-                filter: "order_id=eq." + orderId
-            },
-
-            () => {
-
-                loadOrderStatus();
-
-            }
-        )
-
-        .subscribe();
-
-}
+// Check for status changes every 2 seconds
+setInterval(loadOrderStatus, 2000);
 
 </script>
 

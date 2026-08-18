@@ -3,355 +3,484 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Brew & Bliss</title>
+    <title>Brew & Bliss</title>
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+/* =========================
+   CONTACT FIX
+========================= */
 
+.contact-section {
+    background: #f8f3ed;
+    padding: 90px 8%;
+    text-align: center;
+}
 
-<link rel="stylesheet" href="css/style.css">
+.contact-section h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 42px;
+    color: #3b2116;
+    margin-bottom: 15px;
+}
 
+.contact-text {
+    font-size: 17px;
+    color: #6b5548;
+    max-width: 650px;
+    margin: 0 auto 45px;
+    line-height: 1.7;
+}
+
+.contact-cards {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.contact-card {
+    background: #ffffff;
+    padding: 30px 25px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(59, 33, 22, 0.08);
+}
+
+.contact-card h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 20px;
+    color: #3b2116;
+    margin-bottom: 12px;
+}
+
+.contact-card p {
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    color: #6b5548;
+    line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+
+    .contact-section {
+        padding: 70px 6%;
+    }
+
+    .contact-section h2 {
+        font-size: 34px;
+    }
+
+    .contact-cards {
+        grid-template-columns: 1fr;
+    }
+
+}
+</style>
 
 </head>
 
 
-<body>
+<body id="top">
 
 
-<!-- HERO SECTION -->
+    <!-- =========================
+         HERO SECTION
+    ========================== -->
 
-<section class="hero">
+    <section class="hero">
 
+        <video autoplay muted loop playsinline class="bg-video">
 
-<video autoplay muted loop playsinline class="bg-video">
+            <source
+                src="https://res.cloudinary.com/xk9sr4ls/video/upload/v1786017797/pika-f776a48d-ac4b-4a90-9127-dfdf9d708edb_xwu1fz.mp4"
+                type="video/mp4">
 
-<source src="https://res.cloudinary.com/xk9sr4ls/video/upload/v1786017797/pika-f776a48d-ac4b-4a90-9127-dfdf9d708edb_xwu1fz.mp4" type="video/mp4">
+        </video>
 
-</video>
 
+        <div class="overlay"></div>
+<div class="watermark-cover"></div>
 
-<div class="overlay"></div>
+        <div class="hero-content">
 
+            <div class="left">
 
+                <h1>Brew & Bliss</h1>
 
-<div class="hero-content">
+                <h2>Fresh Coffee. Fresh Start.</h2>
 
+                <p>
+                    Sign up today and enjoy a FREE handcrafted coffee
+                    on your first visit. Limited time-offer!
+                </p>
 
-<div class="left">
 
+                <!-- FREE COFFEE FORM -->
 
-<h1>Brew & Bliss</h1>
+                <form
+                    id="coffee-form"
+                    class="coffee-form"
+                    action="https://formspree.io/f/xeajowwl"
+                    method="POST">
 
+                    <input
+                        type="text"
+                        name="first_name"
+                        placeholder="Enter your first name"
+                        required>
 
-<h2>Fresh Coffee. Fresh Start.</h2>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required>
 
+                    <button type="submit">
+                        Claim My Free Coffee
+                    </button>
 
-<p>
-Sign up today and enjoy a FREE handcrafted coffee 
-on your first visit. Limited time-offer!
-</p>
+                    <p id="form-message"></p>
 
+                </form>
 
-<!-- FREE COFFEE FORM -->
-<form
-    id="coffee-form"
-    class="coffee-form"
-    action="https://formspree.io/f/xeajowwl"
-    method="POST">
+            </div>
 
-    <input
-        type="text"
-        name="first_name"
-        placeholder="Enter your first name"
-        required>
+        </div>
 
-    <input
-        type="email"
-        name="email"
-        placeholder="Enter your email"
-        required>
+    </section>
 
-    <button type="submit">
-        Claim My Free Coffee
-    </button>
 
-    <p id="form-message"></p>
 
-</form>
+    <!-- =========================
+         WHY SECTION
+    ========================== -->
 
+    <section class="why-section">
 
-<!-- ORDER FORM -->
-<section id="order-form" class="order-section">
+        <h2>Why Choose Brew & Bliss?</h2>
 
-    <div class="order-content">
-
-        
-
-</section>
-
-
-
-</div>
-
-
-</div>
-
-
-</section>
-
-
-<!-- WHY SECTION -->
-
-<section class="why-section">
-
-
-<h2>Why Choose Brew & Bliss?</h2>
-
-
-<p class="section-text">
-More than coffee, it's a moment of comfort, connection, and happiness.
-</p>
-
-
-
-<div class="cards">
-
-
-<div class="card">
-
-<h3>☕ Premium Coffee Beans</h3>
-
-<p>
-Carefully selected coffee beans crafted
-for a rich and unforgettable flavor.
-</p>
-
-</div>
-
-
-
-<div class="card">
-
-<h3>🌿 Freshly Crafted Daily</h3>
-
-<p>
-Every cup is prepared fresh with passion
-and attention to quality.
-</p>
-
-</div>
-
-
-
-<div class="card">
-
-<h3>❤️ Cozy Coffee Experience</h3>
-
-<p>
-A warm and relaxing space to enjoy,
-work, and connect.
-</p>
-
-</div>
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-<!-- MENU SECTION -->
-
-
-<section class="menu-section">
-
-
-<h2>Our Signature Drinks</h2>
-
-
-<p class="menu-text">
-Discover our handcrafted coffee creations made with passion.
-</p>
-
-<div class="menu-cards">
-
-    <div class="menu-card">
-        <img src="images/cappuccino.jpg" alt="Classic Cappuccino">
-
-        <h3>Classic Cappuccino</h3>
-
-        <p>
-            Smooth espresso topped with velvety milk foam,
-            crafted for a rich and comforting coffee experience.
+        <p class="section-text">
+            More than coffee, it's a moment of comfort,
+            connection, and happiness.
         </p>
 
-        <a href="order.html" class="menu-btn">Order Now</a>
-    </div>
 
-    <div class="menu-card">
-        <img src="images/matcha.jpg" alt="Matcha Latte">
+        <div class="cards">
 
-        <h3>Matcha Latte</h3>
 
-        <p>
-            Creamy Japanese-inspired matcha blended with silky milk
-            for a smooth and refreshing taste.
+            <div class="card">
+
+                <h3>☕ Premium Coffee Beans</h3>
+
+                <p>
+                    Carefully selected coffee beans crafted
+                    for a rich and unforgettable flavor.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>🌿 Freshly Crafted Daily</h3>
+
+                <p>
+                    Every cup is prepared fresh with passion
+                    and attention to quality.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>❤️ Cozy Coffee Experience</h3>
+
+                <p>
+                    A warm and relaxing space to enjoy,
+                    work, and connect.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         MENU SECTION
+    ========================== -->
+
+    <section id="menu" class="menu-section">
+
+        <h2>Our Signature Drinks</h2>
+
+        <p class="menu-text">
+            Discover our handcrafted coffee creations made with passion.
         </p>
 
-        <a href="order.html" class="menu-btn">Order Now</a>
-    </div>
+
+        <div class="menu-cards">
 
 
-    <div class="menu-card">
-        <img src="images/mocha.jpg" alt="Mocha Bliss">
+            <!-- CAPPUCCINO -->
 
-        <h3>Mocha Bliss</h3>
+            <div class="menu-card">
 
-        <p>
-            Rich espresso and luscious chocolate come together
-            for a deliciously smooth and indulgent treat.
+                <img
+                    src="images/cappuccino.jpg"
+                    alt="Classic Cappuccino">
+
+                <h3>Classic Cappuccino</h3>
+
+                <p>
+                    Smooth espresso topped with velvety milk foam,
+                    crafted for a rich and comforting coffee experience.
+                </p>
+
+                <a
+                    href="order.html"
+                    class="menu-btn">
+                    Order Now
+                </a>
+
+            </div>
+
+
+            <!-- MATCHA -->
+
+            <div class="menu-card">
+
+                <img
+                    src="images/matcha.jpg"
+                    alt="Matcha Latte">
+
+                <h3>Matcha Latte</h3>
+
+                <p>
+                    Creamy Japanese-inspired matcha blended with silky milk
+                    for a smooth and refreshing taste.
+                </p>
+
+                <a
+                    href="order.html"
+                    class="menu-btn">
+                    Order Now
+                </a>
+
+            </div>
+
+
+            <!-- MOCHA -->
+
+            <div class="menu-card">
+
+                <img
+                    src="images/mocha.jpg"
+                    alt="Mocha Bliss">
+
+                <h3>Mocha Bliss</h3>
+
+                <p>
+                    Rich espresso and luscious chocolate come together
+                    for a deliciously smooth and indulgent treat.
+                </p>
+
+                <a
+                    href="order.html"
+                    class="menu-btn">
+                    Order Now
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         TESTIMONIAL SECTION
+    ========================== -->
+
+    <section class="testimonial-section">
+
+        <h2>What Our Customers Say</h2>
+
+        <p class="testimonial-text">
+            Real moments from coffee lovers who enjoy Brew & Bliss.
         </p>
 
-        <a href="order.html" class="menu-btn">Order Now</a>
-    </div>
 
-</div>
-
-</div>
+        <div class="testimonial-cards">
 
 
-</section>
+            <div class="testimonial-card">
+
+                <p>
+                    "The coffee is amazing! The flavor is rich
+                    and the place feels so relaxing."
+                </p>
+
+                <h3>- Sarah M.</h3>
+
+            </div>
 
 
+            <div class="testimonial-card">
+
+                <p>
+                    "My favorite spot for coffee and a peaceful
+                    place to work."
+                </p>
+
+                <h3>- James R.</h3>
+
+            </div>
 
 
+            <div class="testimonial-card">
 
-<!-- TESTIMONIAL SECTION -->
+                <p>
+                    "The Matcha Latte is so smooth and delicious.
+                    Definitely coming back!"
+                </p>
 
+                <h3>- Emily T.</h3>
 
-<section class="testimonial-section">
-
-
-<h2>What Our Customers Say</h2>
-
-
-<p class="testimonial-text">
-Real moments from coffee lovers who enjoy Brew & Bliss.
-</p>
+            </div>
 
 
+        </div>
 
-<div class="testimonial-cards">
-
-
-<div class="testimonial-card">
-
-<p>
-"The coffee is amazing! The flavor is rich
-and the place feels so relaxing."
-</p>
-
-<h3>- Sarah M.</h3>
-
-</div>
-
-
-
-<div class="testimonial-card">
-
-<p>
-"My favorite spot for coffee and a peaceful
-place to work."
-</p>
-
-<h3>- James R.</h3>
-
-</div>
+    </section>
 
 
 
-<div class="testimonial-card">
-
-<p>
-"The Matcha Latte is so smooth and delicious.
-Definitely coming back!"
-</p>
-
-<h3>- Emily T.</h3>
-
-</div>
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-<!-- CTA -->
-
+   <!-- =========================
+     CTA SECTION
+========================== -->
 
 <section class="cta-section">
 
+    <h2>Ready for Your Perfect Cup?</h2>
 
-<h2>Ready for Your Perfect Cup?</h2>
+    <p>
+        Join Brew & Bliss today and enjoy your first
+        handcrafted coffee for FREE.
+    </p>
 
-
-<p>
-Join Brew & Bliss today and enjoy your first handcrafted coffee for FREE.
-</p>
-
-
-<a href="#coffee-form" class="cta-btn">
-    Claim My Free Coffee
-</a>
-
+    <a
+        href="#coffee-form"
+        class="cta-btn">
+        Claim My Free Coffee
+    </a>
 
 </section>
 
-<!-- FOOTER -->
 
+<!-- =========================
+     CONTACT SECTION
+========================== -->
+
+<section id="contact" class="contact-section">
+
+    <h2>Visit Brew & Bliss</h2>
+
+    <p class="contact-text">
+        We'd love to serve you your perfect cup.
+        Come visit us or get in touch with us.
+    </p>
+
+    <div class="contact-cards">
+
+        <div class="contact-card">
+
+            <h3>📍 Location</h3>
+
+            <p>
+                Brew & Bliss Coffee Shop<br>
+                Park Avenue, Davao City, Philippines
+            </p>
+
+        </div>
+
+
+        <div class="contact-card">
+
+            <h3>📞 Contact</h3>
+
+            <p>
+                +63 9532769688<br>
+                hello@brewandbliss.com
+            </p>
+
+        </div>
+
+
+        <div class="contact-card">
+
+            <h3>🕒 Opening Hours</h3>
+
+            <p>
+                Monday – Sunday<br>
+                8:00 AM – 9:00 PM
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================
+     FOOTER
+========================== -->
 
 <footer class="footer">
 
+    <h2>Brew & Bliss</h2>
 
-<h2>Brew & Bliss</h2>
+    <p>
+        Fresh Coffee. Fresh Start.
+    </p>
 
+    <div class="footer-links">
 
-<p>
-Fresh Coffee. Fresh Start.
-</p>
+        <a href="#top">Home</a>
 
+        <a href="#menu">Menu</a>
 
-<div class="footer-links">
+        <a href="#contact">Contact</a>
 
-<a href="#">Home</a>
-<a href="#">Menu</a>
-<a href="#">Contact</a>
+    </div>
 
-</div>
-
-<p class="copyright">
-© 2026 Brew & Bliss. All Rights Reserved.
-</p>
-
+    <p class="copyright">
+        © 2026 Brew & Bliss. All Rights Reserved.
+    </p>
 
 </footer>
 
-<script src="js/script.js"></script>
+    <script src="js/script.js"></script>
+
 
 </body>
 

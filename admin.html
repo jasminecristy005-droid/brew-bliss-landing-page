@@ -200,10 +200,11 @@ font-size: 12px;
 
 .status-select:focus {
     border-color: #b57b35;
+
 }
-.clear-button {
-    margin-top: 20px;
-    padding: 10px 18px;
+.logout-button {
+    margin-top: 15px;
+    padding: 10px 20px;
     border: none;
     border-radius: 20px;
     background: #8f5d28;
@@ -214,9 +215,10 @@ font-size: 12px;
     cursor: pointer;
 }
 
-.clear-button:hover {
+.logout-button:hover {
     background: #6f4e37;
 }
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase.js"></script>
@@ -224,12 +226,14 @@ font-size: 12px;
 
 <body>
 
-    <div class="admin-container">
+    <div class="header">
+    <div class="brand">Brew & Bliss</div>
+    <p class="subtitle">Order Management Dashboard</p>
 
-        <div class="header">
-            <div class="brand">Brew & Bliss</div>
-            <p class="subtitle">Order Management Dashboard</p>
-        </div>
+    <button onclick="logoutAdmin()" class="logout-button">
+        Logout
+    </button>
+</div>
 
         <div class="dashboard">
 
@@ -293,14 +297,17 @@ font-size: 12px;
         <a href="index.html" class="back-link">
             ← Back to Brew & Bliss
         </a>
-        <button onclick="clearOrders()" class="clear-button">
-    Clear All Test Orders
-</button>
+        
 
     </div>
 
 </body>
 <script>
+// =========================
+// ADMIN AUTHENTICATION CHECK
+// =========================
+
+
 
 const ordersTable = document.getElementById("orders-table");
 
@@ -404,7 +411,7 @@ async function loadOrders() {
 
             <td>${order.quantity || "—"}</td>
 
-            <td>—</td>
+           <td>${order.order_type || "—"}</td>
 
             <td>${orderDate}</td>
 
@@ -498,25 +505,77 @@ async function loadOrders() {
     });
 
 }
+async function initializeAdminDashboard() {
 
-loadOrders();
+    const {
+        data: { session }
+    } = await supabaseClient.auth.getSession();
 
-function clearOrders() {
+    if (!session) {
 
-    const confirmClear = confirm(
-        "Are you sure you want to delete all test orders?"
-    ); 
+        window.location.href = "admin-login.html";
 
-
-    if (confirmClear) {
-
-        localStorage.removeItem("brewBlissOrders");
-
-        loadOrders();
-
+        return;
     }
+
+    // Load orders only after authentication
+    loadOrders();
+
+
+    // ========================================
+    // REALTIME NEW ORDER LISTENER
+    // ========================================
+
+    supabaseClient
+        .channel("admin-orders")
+        .on(
+            "postgres_changes",
+            {
+                event: "*",
+                schema: "public",
+                table: "orders"
+            },
+            (payload) => {
+
+                console.log(
+                    "🔥 REALTIME EVENT RECEIVED:",
+                    payload
+                );
+
+                loadOrders();
+
+            }
+        )
+        .subscribe((status) => {
+
+            console.log(
+                "Admin realtime status:",
+                status
+            );
+
+        });
 
 }
 
+initializeAdminDashboard();
+
+setInterval(() => {
+    loadOrders();
+}, 5000);
+async function logoutAdmin() {
+
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+
+        console.error("Logout error:", error);
+
+        alert("Unable to logout. Please try again.");
+
+        return;
+    }
+
+    window.location.href = "admin-login.html";
+}
 </script>
 </html>

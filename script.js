@@ -59,35 +59,111 @@ if (orderForm) {
         }
 
         try {
-            const response = await fetch(orderForm.action, {
-                method: "POST",
-                body: new FormData(orderForm),
-                headers: {
-                    "Accept": "application/json"
-                }
-            });
 
-            if (response.ok) {
-                window.location.href =
-                    "https://jasminecristy005-droid.github.io/brew-bliss-landing-page/thankyou.html";
-            } else {
+            // Get values from the order form
+            const formData = new FormData(orderForm);
+
+            const firstName = formData.get("first_name");
+            const lastName = formData.get("last_name");
+            const phone = formData.get("phone");
+            const product = formData.get("product");
+            const quantity = formData.get("quantity");
+            const price = formData.get("price");
+            const orderType = formData.get("order_type");
+
+
+            // =========================
+            // SAVE ORDER TO SUPABASE
+            // =========================
+
+            const { data, error } = await supabaseClient
+                .from("orders")
+                .insert([
+                    {
+                        first_name: firstName,
+                        last_name: lastName,
+                        phone: phone,
+                        product: product,
+                        quantity: quantity,
+                        price: price,
+                        order_type: orderType
+                    }
+                ])
+                .select()
+                .single();
+
+
+            if (error) {
+
+                console.error(
+                    "Supabase order error:",
+                    error
+                );
+
+                alert(
+                    "Unable to save your order. Please try again."
+                );
+
                 if (button) {
                     button.disabled = false;
                     button.textContent = "Place My Order";
                 }
 
-                alert("Something went wrong. Please try again.");
+                return;
             }
 
+
+            console.log(
+                "Order saved to Supabase:",
+                data
+            );
+
+
+            // =========================
+            // ALSO SEND TO FORMSPREE
+            // =========================
+
+            const response = await fetch(orderForm.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+
+            if (response.ok) {
+
+                window.location.href =
+                    "https://jasminecristy005-droid.github.io/brew-bliss-landing-page/thankyou.html";
+
+            } else {
+
+                console.warn(
+                    "Formspree submission failed."
+                );
+
+                // Order is already saved in Supabase
+                window.location.href =
+                    "https://jasminecristy005-droid.github.io/brew-bliss-landing-page/thankyou.html";
+            }
+
+
         } catch (error) {
-            console.error(error);
+
+            console.error(
+                "Order submission error:",
+                error
+            );
+
+            alert(
+                "Unable to submit the order. Please try again."
+            );
 
             if (button) {
                 button.disabled = false;
                 button.textContent = "Place My Order";
             }
-
-            alert("Unable to submit the order. Please try again.");
         }
     });
 }

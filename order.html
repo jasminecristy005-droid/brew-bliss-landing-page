@@ -319,6 +319,9 @@ orderForm.addEventListener("submit", async function (event) {
     const quantity =
         Number(document.getElementById("quantity").value);
 
+    const orderType =
+    document.getElementById("order-type").value;
+
     // Product prices
     const prices = {
         "Cappuccino": 120,
@@ -392,7 +395,8 @@ orderForm.addEventListener("submit", async function (event) {
                         phone: phone,
                         product: product,
                         quantity: quantity,
-                        price: price
+                        price: price,
+                        order_type: document.getElementById("order-type").value
                     }
                 ])
                 .select();
