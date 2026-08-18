@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ÉLORA Admin Dashboard</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="admin-body">
+
+    <!-- ADMIN HEADER -->
+
+    <header class="admin-header">
+
+        <a href="index.html" class="admin-logo">
+            ÉLORA
+        </a>
+
+        <div class="admin-header-right">
+
+            <span>
+                Admin
+            </span>
+
+            <a href="index.html">
+                View Store
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- ADMIN LAYOUT -->
+
+    <div class="admin-layout">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="admin-sidebar">
+
+            <nav>
+
+                <a href="#" class="admin-nav active">
+                    Dashboard
+                </a>
+
+                <a href="#" class="admin-nav">
+                    Orders
+                </a>
+
+                <a href="#" class="admin-nav">
+                    Products
+                </a>
+
+                <a href="#" class="admin-nav">
+                    Customers
+                </a>
+
+                <a href="#" class="admin-nav">
+                    Settings
+                </a>
+
+            </nav>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+
+        <main class="admin-main">
+
+            <div class="admin-title">
+
+                <div>
+
+                    <p class="eyebrow">
+                        ÉLORA ADMIN
+                    </p>
+
+                    <h1>
+                        Dashboard
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+
+            <section class="admin-stats">
+
+                <div class="admin-stat-card">
+
+                    <span>
+                        Total Orders
+                    </span>
+
+                    <strong id="totalOrders">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="admin-stat-card">
+
+                    <span>
+                        New Orders
+                    </span>
+
+                    <strong id="newOrders">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="admin-stat-card">
+
+                    <span>
+                        Processing
+                    </span>
+
+                    <strong id="processingOrders">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="admin-stat-card">
+
+                    <span>
+                        Revenue
+                    </span>
+
+                    <strong id="totalRevenue">
+                        $0
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- ORDERS -->
+
+            <section class="admin-orders">
+
+                <div class="admin-section-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            ORDER MANAGEMENT
+                        </p>
+
+                        <h2>
+                            Recent Orders
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="orders-table-wrapper">
+
+                    <table class="orders-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Order
+                                </th>
+
+                                <th>
+                                    Customer
+                                </th>
+
+                                <th>
+                                    Total
+                                </th>
+
+                                <th>
+                                    Payment
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="ordersTableBody">
+
+                            <tr>
+
+                                <td colspan="6">
+                                    No orders yet.
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="js/admin.js"></script>
+
+</body>
+
+</html>
