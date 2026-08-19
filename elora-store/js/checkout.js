@@ -1,7 +1,7 @@
 // =========================
 // ÉLORA CHECKOUT
 // =========================
-
+console.log("ÉLORA CHECKOUT JS LOADED");
 document.addEventListener("DOMContentLoaded", () => {
 
     const form = document.getElementById("checkoutForm");
@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCheckoutSummary();
 
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
+        console.log("ÉLORA CHECKOUT SUBMIT FIRED");
 
         event.preventDefault();
 
@@ -87,13 +88,91 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         // =========================
-        // SAVE ORDER
+        // SAVE TO LOCAL STORAGE
         // =========================
 
         localStorage.setItem(
             "eloraLastOrder",
             JSON.stringify(order)
         );
+
+
+        // =========================
+        // SAVE TO SUPABASE
+        // =========================
+console.log("ÉLORA: Starting Supabase save...");
+        try {
+console.log("ÉLORA: Inserting order:", order);
+const { data: authData } = await supabaseClient.auth.getSession();
+
+console.log(
+    "ÉLORA SESSION:",
+    authData.session
+);
+            const { data, error } =
+    await supabaseClient
+        .from("elora_orders")
+        .insert([{
+
+            order_id: order.orderId,
+
+            customer_name: customer.fullName,
+
+            customer_email: customer.email,
+
+            phone: customer.phone,
+
+            address: customer.address,
+
+            city: customer.city,
+
+            province: customer.province,
+
+            postal_code: customer.postalCode,
+
+            items: order.items,
+
+            total: order.total,
+
+            payment_method: customer.paymentMethod,
+
+            status: order.status,
+
+            created_at: order.createdAt
+
+        }]);
+
+
+            if (error) {
+
+               console.error(
+    "ÉLORA Supabase order error:",
+    JSON.stringify(error, null, 2)
+
+);
+
+alert(
+    "Supabase Error:\n\n" +
+    JSON.stringify(error, null, 2)
+);
+
+            } else {
+
+                console.log(
+                    "ÉLORA order saved to Supabase:",
+                    data
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "ÉLORA Supabase connection error:",
+                error
+            );
+
+        }
 
 
         // =========================
