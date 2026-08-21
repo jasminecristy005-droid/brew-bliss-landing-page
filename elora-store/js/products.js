@@ -10,7 +10,7 @@ const products = [
         category: "Bags",
         description: "Structured Leather Handbag",
         price: 189,
-        image: "assets/images/signature-bag.jpg"
+        image: "assets/images/signature-bag.png"
     },
 
     {
@@ -19,7 +19,7 @@ const products = [
         category: "Watches",
         description: "Minimal Gold Watch",
         price: 249,
-        image: "assets/images/timepiece.jpg"
+        image: "assets/images/timepiece.png"
     },
 
     {

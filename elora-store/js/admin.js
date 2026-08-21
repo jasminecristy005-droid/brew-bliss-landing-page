@@ -146,10 +146,6 @@ function updateStats(orders) {
 }
 
 
-// =========================
-// RENDER ORDERS
-// =========================
-
 function renderOrders(orders) {
 
     const tableBody =
@@ -162,7 +158,7 @@ function renderOrders(orders) {
 
         tableBody.innerHTML = `
             <tr>
-                <td colspan="6">
+                <td colspan="7">
                     No orders yet.
                 </td>
             </tr>
@@ -175,88 +171,123 @@ function renderOrders(orders) {
     tableBody.innerHTML =
         orders.map(order => `
 
-        <tr>
+            <tr>
 
-            <td>
-                <strong>
-                    ${order.order_id}
-                </strong>
-            </td>
-
-
-            <td>
-                ${order.customer_name}
-            </td>
+                <td>
+                    <strong>
+                        ${order.order_id || "-"}
+                    </strong>
+                </td>
 
 
-            <td>
-                $${Number(order.total).toFixed(2)}
-            </td>
+                <td>
+                    ${
+                        order.created_at
+                            ? new Date(
+                                order.created_at
+                            ).toLocaleString(
+                                "en-PH",
+                                {
+                                    dateStyle: "medium",
+                                    timeStyle: "short"
+                                }
+                            )
+                            : "-"
+                    }
+                </td>
 
 
-            <td>
-                ${order.payment_method || "-"}
-            </td>
+                <td>
+                    ${order.customer_name || "-"}
+                </td>
 
 
-            <td>
-
-                <select
-                    class="admin-status-select"
-                    data-order-id="${order.order_id}"
-                >
-
-                    <option value="New Order"
-                        ${order.status === "New Order"
-                            ? "selected"
-                            : ""}>
-                        New Order
-                    </option>
+                <td>
+                    $${Number(
+                        order.total || 0
+                    ).toFixed(2)}
+                </td>
 
 
-                    <option value="Processing"
-                        ${order.status === "Processing"
-                            ? "selected"
-                            : ""}>
-                        Processing
-                    </option>
+                <td>
+                    ${order.payment_method || "-"}
+                </td>
 
 
-                    <option value="Ready"
-                        ${order.status === "Ready"
-                            ? "selected"
-                            : ""}>
-                        Ready
-                    </option>
+                <td>
+
+                    <select
+                        class="admin-status-select"
+                        data-order-id="${order.order_id}"
+                    >
+
+                        <option
+                            value="New Order"
+                            ${
+                                order.status === "New Order"
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            New Order
+                        </option>
 
 
-                    <option value="Completed"
-                        ${order.status === "Completed"
-                            ? "selected"
-                            : ""}>
-                        Completed
-                    </option>
+                        <option
+                            value="Processing"
+                            ${
+                                order.status === "Processing"
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            Processing
+                        </option>
 
-                </select>
 
-            </td>
+                        <option
+                            value="Ready"
+                            ${
+                                order.status === "Ready"
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            Ready
+                        </option>
 
 
-            <td>
+                        <option
+                            value="Completed"
+                            ${
+                                order.status === "Completed"
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            Completed
+                        </option>
 
-                <button
-                    type="button"
-                    class="view-order-button"
-                    onclick="viewOrder('${order.order_id}')"
-                >
-                    View
-                </button>
+                    </select>
 
-            </td>
+                </td>
 
-        </tr>
 
-    `).join("");
+                <td>
+
+                    <button
+                        type="button"
+                        class="view-order-button"
+                        onclick="viewOrder('${order.order_id}')"
+                    >
+                        View
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `).join("");
 
 
     document
@@ -276,13 +307,6 @@ function renderOrders(orders) {
                         this.value;
 
 
-                    console.log(
-                        "ÉLORA STATUS CHANGE:",
-                        orderId,
-                        newStatus
-                    );
-
-
                     await updateOrderStatus(
                         orderId,
                         newStatus
@@ -294,7 +318,6 @@ function renderOrders(orders) {
         });
 
 }
-
 
 // =========================
 // UPDATE ORDER STATUS
@@ -348,18 +371,262 @@ async function updateOrderStatus(
 // =========================
 // VIEW ORDER
 // =========================
+// =========================
+// VIEW ORDER DETAILS
+// =========================
 
-function viewOrder(orderId) {
+async function viewOrder(orderId) {
 
     console.log(
-        "VIEW ORDER:",
+        "ÉLORA VIEW ORDER:",
         orderId
     );
 
-    alert(
-        "Order ID: " +
-        orderId
-    );
+    const {
+        data: order,
+        error
+    } = await supabaseClient
+        .from("elora_orders")
+        .select("*")
+        .eq("order_id", orderId)
+        .single();
+
+
+    if (error || !order) {
+
+        console.error(
+            "ÉLORA VIEW ORDER ERROR:",
+            error
+        );
+
+        alert(
+            "Unable to load order details."
+        );
+
+        return;
+    }
+
+
+    const modal =
+        document.getElementById("orderModal");
+
+    const modalOrderId =
+        document.getElementById("modalOrderId");
+
+    const modalBody =
+        document.getElementById("orderModalBody");
+
+
+    if (!modal || !modalOrderId || !modalBody) {
+
+        console.error(
+            "ÉLORA: Order modal elements not found."
+        );
+
+        return;
+    }
+
+
+    // =========================
+    // ORDER ITEMS
+    // =========================
+
+    let items = order.items;
+
+    if (typeof items === "string") {
+
+        try {
+            items = JSON.parse(items);
+        } catch (error) {
+
+            console.error(
+                "ÉLORA items parse error:",
+                error
+            );
+
+            items = [];
+        }
+
+    }
+
+
+    const itemsHTML =
+        Array.isArray(items)
+            ? items.map(item => `
+
+                <div class="order-detail-product">
+
+                    <div>
+
+                        <strong>
+                            ${item.name}
+                        </strong>
+
+                        <span>
+                            ${item.description || ""}
+                        </span>
+
+                    </div>
+
+                    <div class="order-detail-product-right">
+
+                        <span>
+                            ×${item.quantity}
+                        </span>
+
+                        <strong>
+                            $${Number(item.price).toFixed(2)}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            `).join("")
+            : "";
+
+
+    // =========================
+    // DATE
+    // =========================
+
+    const orderDate =
+        order.created_at
+            ? new Date(
+                order.created_at
+            ).toLocaleString(
+                "en-PH",
+                {
+                    dateStyle: "long",
+                    timeStyle: "short"
+                }
+            )
+            : "-";
+
+
+    // =========================
+    // MODAL CONTENT
+    // =========================
+
+    modalOrderId.textContent =
+        order.order_id;
+
+
+    modalBody.innerHTML = `
+
+        <div class="order-detail-section">
+
+            <h3>
+                Customer
+            </h3>
+
+            <div class="order-detail-grid">
+
+                <div>
+                    <span>Email</span>
+                    <strong>
+                        ${order.customer_email || "-"}
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Phone</span>
+                    <strong>
+                        ${order.phone || "-"}
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="order-detail-section">
+
+            <h3>
+                Shipping Address
+            </h3>
+
+            <p class="order-address">
+
+                ${order.address || "-"}<br>
+
+                ${order.city || ""}, 
+                ${order.province || ""}<br>
+
+                ${order.postal_code || ""}
+
+            </p>
+
+        </div>
+
+
+        <div class="order-detail-section">
+
+            <h3>
+                Products
+            </h3>
+
+            <div class="order-detail-products">
+
+                ${itemsHTML}
+
+            </div>
+
+        </div>
+
+
+        <div class="order-detail-section">
+
+            <h3>
+                Order Summary
+            </h3>
+
+            <div class="order-summary-detail">
+
+                <div>
+                    <span>Payment</span>
+                    <strong>
+                        ${order.payment_method || "-"}
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Status</span>
+                    <strong>
+                        ${order.status || "-"}
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Order Date</span>
+                    <strong>
+                        ${orderDate}
+                    </strong>
+                </div>
+
+                <div class="order-grand-total">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong>
+                        $${Number(order.total || 0).toFixed(2)}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    // SHOW MODAL
+
+    modal.style.display = "flex";
 
 }
 // =========================
@@ -415,3 +682,83 @@ function subscribeToOrderChanges() {
         });
 
 }
+// =========================
+// ÉLORA ADMIN LOGOUT
+// =========================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const logoutButton =
+        document.getElementById("logoutButton");
+
+    if (!logoutButton) return;
+
+    logoutButton.addEventListener("click", async (event) => {
+
+        event.preventDefault();
+
+        const { error } =
+            await supabaseClient.auth.signOut();
+
+        if (error) {
+
+            console.error(
+                "ÉLORA logout error:",
+                error
+            );
+
+            alert("Unable to log out.");
+
+            return;
+        }
+
+        window.location.href =
+            "admin-login.html";
+
+    });
+
+});
+// =========================
+// CLOSE ORDER MODAL
+// =========================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const closeButton =
+        document.getElementById(
+            "closeOrderModal"
+        );
+
+    const modal =
+        document.getElementById(
+            "orderModal"
+        );
+
+
+    if (!closeButton || !modal) return;
+
+
+    closeButton.addEventListener(
+        "click",
+        () => {
+
+            modal.style.display = "none";
+
+        }
+    );
+
+
+    modal.addEventListener(
+        "click",
+        (event) => {
+
+            if (event.target === modal) {
+
+                modal.style.display = "none";
+
+            }
+
+        }
+    );
+
+});

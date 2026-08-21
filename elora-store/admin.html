@@ -13,62 +13,73 @@
 <body class="admin-body">
 
     <!-- ADMIN HEADER -->
+<header class="admin-header">
 
-    <header class="admin-header">
+    <a href="index.html" class="admin-logo">
+        ÉLORA
+    </a>
 
-        <a href="index.html" class="admin-logo">
-            ÉLORA
+    <div class="admin-header-right">
+
+        <span>
+            ÉLORA ADMIN
+        </span>
+
+        <a href="index.html">
+            View Store
         </a>
 
-        <div class="admin-header-right">
+        <a href="#" id="logoutButton">
+            Logout
+        </a>
 
-            <span>
-                Admin
-            </span>
+    </div>
 
-            <a href="index.html">
-                View Store
-            </a>
-
-        </div>
-
-    </header>
+</header>
 
 
     <!-- ADMIN LAYOUT -->
 
     <div class="admin-layout">
 
+<!-- SIDEBAR -->
 
-        <!-- SIDEBAR -->
+<!-- SIDEBAR -->
 
-        <aside class="admin-sidebar">
+<aside class="admin-sidebar">
 
-            <nav>
+    <nav>
 
-                <a href="#" class="admin-nav active">
-                    Dashboard
-                </a>
+        <a href="admin.html"
+           class="admin-nav active"
+           id="dashboardNav">
+            Dashboard
+        </a>
 
-                <a href="#" class="admin-nav">
-                    Orders
-                </a>
+        <a href="admin.html#orders"
+           class="admin-nav"
+           id="ordersNav">
+            Orders
+        </a>
 
-                <a href="#" class="admin-nav">
-                    Products
-                </a>
+        <a href="admin-products.html"
+           class="admin-nav">
+            Products
+        </a>
 
-                <a href="#" class="admin-nav">
-                    Customers
-                </a>
+        <a href="admin-customers.html"
+           class="admin-nav">
+            Customers
+        </a>
 
-                <a href="#" class="admin-nav">
-                    Settings
-                </a>
+        <a href="admin-settings.html"
+           class="admin-nav">
+            Settings
+        </a>
 
-            </nav>
+    </nav>
 
-        </aside>
+</aside>
 
 
         <!-- MAIN CONTENT -->
@@ -152,7 +163,7 @@
 
             <!-- ORDERS -->
 
-            <section class="admin-orders">
+            <section class="admin-orders" id="orders">
 
                 <div class="admin-section-heading">
 
@@ -180,16 +191,20 @@
                             <tr>
 
                                 <th>
-                                    Order
-                                </th>
+    Order
+</th>
 
-                                <th>
-                                    Customer
-                                </th>
+<th>
+    Date & Time
+</th>
 
-                                <th>
-                                    Total
-                                </th>
+<th>
+    Customer
+</th>
+
+<th>
+    Total
+</th>
 
                                 <th>
                                     Payment
@@ -212,7 +227,7 @@
 
                             <tr>
 
-                                <td colspan="6">
+                                <td colspan="7">
                                     No orders yet.
                                 </td>
 
@@ -225,6 +240,39 @@
                 </div>
 
             </section>
+            <!-- =========================
+     ORDER DETAILS MODAL
+========================= -->
+
+<div
+    id="orderModal"
+    class="order-modal"
+    style="display: none;"
+>
+
+    <div class="order-modal-content">
+
+        <button
+            type="button"
+            id="closeOrderModal"
+            class="order-modal-close"
+        >
+            ×
+        </button>
+
+        <p class="eyebrow">
+            ORDER DETAILS
+        </p>
+
+        <h2 id="modalOrderId">
+            -
+        </h2>
+
+        <div id="orderModalBody"></div>
+
+    </div>
+
+</div>
 
         </main>
 
@@ -236,7 +284,24 @@
 <script src="js/supabase-config.js"></script>
 
 <script src="js/admin.js"></script>
+<script>
+const dashboardNav = document.getElementById("dashboardNav");
+const ordersNav = document.getElementById("ordersNav");
 
+function updateActiveNav() {
+    if (window.location.hash === "#orders") {
+        dashboardNav.classList.remove("active");
+        ordersNav.classList.add("active");
+    } else {
+        ordersNav.classList.remove("active");
+        dashboardNav.classList.add("active");
+    }
+}
+
+updateActiveNav();
+
+window.addEventListener("hashchange", updateActiveNav);
+</script>
 </body>
 
 </html>
